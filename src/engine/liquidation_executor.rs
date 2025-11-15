@@ -7,7 +7,7 @@ use chrono::Utc;
 use uuid::Uuid;
 
 pub struct LiquidationExecutor {
-    state: Arc<EngineState>,
+    state: Arc<Eng neState>,
     db: PgPool,
 }
 
@@ -20,13 +20,13 @@ impl LiquidationExecutor {
         loop {
             sleep(Duration::from_millis(1200)).await;
 
-            // We'll lock and iterate mutably
+
             let mut positions = self.state.positions.lock().await;
-            for pos in positions.iter_mut() {
+            for pos in positions.iter_mut() { 
                 if !pos.open { continue; }
 
                 if let Some(mark) = self.state.oracle.get_mark_price(&pos.symbol).await {
-                    // compute unrealized PnL (i128 to avoid overflow)
+                    // compute PnL
                     let unrealized = if pos.is_long {
                         (pos.size as i128) * (mark as i128 - pos.entry_price as i128)
                     } else {
@@ -47,7 +47,7 @@ impl LiquidationExecutor {
                         let liquidated_value = (reduction as i128) * (mark as i128);
                         let reward = ((liquidated_value as i128 * 25) / 1000) as i64; // 2.5%
 
-                        // store margin_before
+                        // store 
                         let margin_before = (pos.margin as i128 + unrealized) as i64;
 
                         // apply reduction
@@ -64,7 +64,7 @@ impl LiquidationExecutor {
                         };
                         let margin_after = (pos.margin as i128 + new_unrealized) as i64;
 
-                        // prepare liquidation record
+                        // liquidation record
                         let record = LiquidationRecord {
                             id: Uuid::new_v4(),
                             position_id: pos.id,
@@ -88,7 +88,7 @@ impl LiquidationExecutor {
                             info!("Executed partial liquidation for pos {} reduction {}", pos.id, reduction);
                         }
 
-                        // if position now zero or margin after negative -> full liquidation handling
+                        // if position now zero or margin after negative full liquidation handling
                         if pos.size <= 0 || margin_after < 0 {
                             // compute bad debt if any
                             let bd = if margin_after < 0 {

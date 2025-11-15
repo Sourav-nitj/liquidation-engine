@@ -7,8 +7,8 @@ pub struct Position {
     pub id: Uuid,
     pub owner: String,
     pub symbol: String,
-    pub size: i64,           // quantity units
-    pub entry_price: i64,    // scaled price (e.g., price * 1_000_000)
+    pub size: i64,           
+    pub entry_price: i64,    
     pub margin: i64,
     pub is_long: bool,
     pub leverage: u16,
@@ -23,7 +23,7 @@ impl Position {
                 owner: "alice".into(),
                 symbol: "BTC-USD".into(),
                 size: 100,
-                entry_price: 65_000_000_000i64, // 65,000 * 1e6
+                entry_price: 65_000_000_000i64,
                 margin: 5_000,
                 is_long: true,
                 leverage: 100,
