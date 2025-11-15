@@ -3,6 +3,9 @@ pub mod oracle;
 pub mod position_monitor;
 pub mod liquidation_executor;
 
+#[cfg(test)]
+mod test;
+
 use sqlx::PgPool;
 use std::sync::Arc;
 use tokio::sync::{broadcast, Mutex};

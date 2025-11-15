@@ -1,6 +1,5 @@
 use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
 use axum::{extract::State, response::IntoResponse};
-use futures::SinkExt;
 use std::sync::Arc;
 
 use crate::engine::EngineState;

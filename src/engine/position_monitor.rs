@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use tokio::time::{sleep, Duration};
 use log::info;
-use crate::engine::{EngineState, models::Position};
+use crate::engine::EngineState;
 
 pub struct PositionMonitor {
     state: Arc<EngineState>,

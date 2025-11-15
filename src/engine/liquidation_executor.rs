@@ -131,27 +131,27 @@ impl LiquidationExecutor {
     }
 
     async fn insert_record(&self, rec: &LiquidationRecord) -> Result<(), sqlx::Error> {
-        sqlx::query!(
-            r#"INSERT INTO liquidation_history (
-                id, position_id, position_owner, liquidator, symbol,
-                liquidated_size, liquidation_price, margin_before, margin_after,
-                liquidator_reward, bad_debt, created_at
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)"#,
-            rec.id,
-            rec.position_id,
-            rec.position_owner,
-            rec.liquidator,
-            rec.symbol,
-            rec.liquidated_size,
-            rec.liquidation_price,
-            rec.margin_before,
-            rec.margin_after,
-            rec.liquidator_reward,
-            rec.bad_debt,
-            rec.timestamp
-        )
-        .execute(&self.db)
-        .await?;
+        sqlx::query(
+            "INSERT INTO liquidation_history (
+                    id, position_id, position_owner, liquidator, symbol,
+                    liquidated_size, liquidation_price, margin_before, margin_after,
+                    liquidator_reward, bad_debt, created_at
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)"
+            )
+            .bind(rec.id)
+            .bind(rec.position_id)
+            .bind(&rec.position_owner)
+            .bind(&rec.liquidator)
+            .bind(&rec.symbol)
+            .bind(rec.liquidated_size)
+            .bind(rec.liquidation_price)
+            .bind(rec.margin_before)
+            .bind(rec.margin_after)
+            .bind(rec.liquidator_reward)
+            .bind(rec.bad_debt)
+            .bind(rec.timestamp)
+            .execute(&self.db)
+            .await?;
         Ok(())
     }
 }
